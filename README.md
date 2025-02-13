@@ -1,4 +1,3 @@
-
 # social_network_system_design
 
 Functional requirements:
@@ -74,13 +73,3 @@ Functional requirements:
 # Search for travel destinations per week (Read)
   10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
   Traffic (Read) = 30 RPS * (20KB text body + 2000KB media) * 10 posts ~= 6Mb text & 600MB media
-
-
-
-
-
- 
-
-
-
-
