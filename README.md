@@ -7,6 +7,7 @@ Functional requirements:
  - Search for popular travel destinations and view posts from those locations
  - View other travelers' feeds and user feeds based on subscriptions in reverse chronological order
 
+
 # Non-functional requirements:
  - 10 000 000 DAU
  - availability 99,95%
