@@ -13,7 +13,9 @@ Functional requirements:
  - availability 99,95%
  - Geo within the CIS countries
  - Data is stored permanently
- - no seasonality
+ - 
+- Seasonality. Usage spikes expected during peak travel/holiday seasons (e.g., summer vacations, winter holidays), with a possible **30-40% increase** in daily activity (posts, comments, feed views). The system must handle these peaks while maintaining performance and availability targets
+- 
 # Limits:
  - Post Text Body max 2000 symb
  - Max 5 images per post
