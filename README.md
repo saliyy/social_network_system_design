@@ -58,14 +58,14 @@ Traffic (Write):
 # Read Posts RPS (Read):
 RPS (Read) = 10 000 000 * 3 feeds / 86 400 = ~= 350 RPS
 Traffic (Read): 
-   Text: 350 PRS * 20KB (text body) +  * 15 posts ~= 100 MB/s text & 
+   Text: 350 PRS * 20KB (text body) * 15 posts ~= 100 MB/s text & 
    Media: 350 PRS * 2000KB (media)  * 15 posts ~= 10 GB/s media
 
 # Make comment RPS (Write)
 10 000 000 * 1 comment per day / 86 400 ~= 150 RPS
 Traffic (Read):
   Text: 150 RPS * 10 KB = 1,500 KB/s = 1.5 MB/s text 
-  Media: 150MB media
+  Media: ~= 150MB 
   
 # Read comments RPS (Read)
 10 000 000 * 2 comment fetches / 86 400 ~= 250 RPS
