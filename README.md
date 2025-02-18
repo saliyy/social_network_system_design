@@ -51,30 +51,40 @@ Functional requirements:
 
 # Publish Post:
 PRS (Write) 10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
-Traffic:
-Text: 30 RPS * 20KB (post body) ~= 600KB/s (text body)
-Media: 30 RPS * + 2000KB (media) ~= 60 MB/s media
+Traffic (Write):
+  Text: 30 RPS * 20KB (post body) ~= 600KB/s (text body)
+  Media: 30 RPS * + 2000KB (media) ~= 60 MB/s media
 
 # Read Posts RPS (Read):
-RPS = 10 000 000 * 3 feeds / 86 400 = ~= 350 RPS
-Traffic (Read) = 350 PRS * 20KB (text body) + 2000KB (media) * 15 posts ~= 100 MB/s text & 10 GB/s media
+RPS (Read) = 10 000 000 * 3 feeds / 86 400 = ~= 350 RPS
+Traffic (Read): 
+   Text: 350 PRS * 20KB (text body) +  * 15 posts ~= 100 MB/s text & 
+   Media: 350 PRS * 2000KB (media)  * 15 posts ~= 10 GB/s media
 
 # Make comment RPS (Write)
 10 000 000 * 1 comment per day / 86 400 ~= 150 RPS
-Traffic (Write) = 150 RPS * 10 KB = 1,500 KB/s = 1.5 MB/s text & 150MB media
-
+Traffic (Read):
+  Text: 150 RPS * 10 KB = 1,500 KB/s = 1.5 MB/s text 
+  Media: 150MB media
+  
 # Read comments RPS (Read)
 10 000 000 * 2 comment fetches / 86 400 ~= 250 RPS
-Traffic (Read) = 250 RPS * 10KB * 10 per comments fetch * 1000KB media ~= 25MB text & ~= 3GB/s media
+Traffic (Read):
+  Text:  250 RPS * 10KB * 10 per comments fetch *  ~= 25MB text 
+  Media: 250 PRS * 1000KB media * 10 comments per fetch ~= 3GB/s media
 
 # Make sub RPS (Write)
 10 000 000 * 1 sub per day / 86 400 ~= 150 RPS
-Traffic (Write) ~= 73KB/s
+Traffic (Write)
+  Text: ~= 73KB/s 
 
 # Make reactions (Write)
 10 000 000 * 5 reactions / 86 000 ~= 550 RPS
-Traffic (Write) ~= 268KB/s
+Traffic (Write)
+  Text: ~= 268KB/s
 
 # Search for travel destinations per week (Read)
 10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
-Traffic (Read) = 30 RPS * (20KB text body + 2000KB media) * 10 posts ~= 6Mb text & 600MB media
+Traffic (Read)
+  Text: 30 RPS * 20KB text body * 10 posts ~= 6Mb text
+  Media: 30 RPS * 2000KB media * 10 posts ~= 600MB media
