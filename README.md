@@ -51,7 +51,9 @@ Functional requirements:
 
 # Publish Post:
   PRS (Write) 10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
-  Traffic (Write) = 30 RPS * 20KB (post body) + 2000KB (media) ~= 600KB/s (text body) & ~= 60 MB/s media 
+  Traffic: 
+     Text: 30 RPS * 20KB (post body) ~= 600KB/s (text body) 
+     Media: 30 RPS * + 2000KB (media) ~= 60 MB/s media 
 
 # Read Posts RPS (Read):
   RPS = 10 000 000 * 3 feeds / 86 400 = ~= 350 RPS
