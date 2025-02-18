@@ -49,65 +49,32 @@ Functional requirements:
 ### Search for travel destination:
   - body ~= 1KB
 
-Publish Post:
-PRS (Write) =
-[ \frac{10{,}000{,}000 \times 2}{7 \times 86{,}400} \approx 30 , \text{RPS} ]
+# Publish Post:
+PRS (Write) 10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
 Traffic:
-Text:
-[ 30 , \text{RPS} \times 20 , \text{KB (тело поста)} \approx 600 , \text{KB/s (текст)} ]
-Media:
-[ 30 , \text{RPS} \times 2000 , \text{KB (медиа)} \approx 60 , \text{MB/s (медиа)} ]
+Text: 30 RPS * 20KB (post body) ~= 600KB/s (text body)
+Media: 30 RPS * + 2000KB (media) ~= 60 MB/s media
 
-Read Posts RPS (Read):
-RPS =
-[ \frac{10{,}000{,}000 \times 3 \text{ поста}}{86{,}400} \approx 350 , \text{RPS} ]
-Traffic:
-Text:
-[ 350 , \text{RPS} \times 20 , \text{KB (тело поста)} \approx 7000 , \text{KB/s (текст)} ]
-Media:
-[ 350 , \text{RPS} \times 2000 , \text{KB (медиа)} \times 15 \approx 10 , \text{GB/s (медиа)} ]
+# Read Posts RPS (Read):
+RPS = 10 000 000 * 3 feeds / 86 400 = ~= 350 RPS
+Traffic (Read) = 350 PRS * 20KB (text body) + 2000KB (media) * 15 posts ~= 100 MB/s text & 10 GB/s media
 
-Make Comment RPS (Write):
-RPS =
-[ \frac{10{,}000{,}000 \times 1 \text{ комментарий в день}}{86{,}400} \approx 150 , \text{RPS} ]
-Traffic:
-Text:
-[ 150 , \text{RPS} \times 10 , \text{KB} \approx 1{,}500 , \text{KB/s} = 1.5 , \text{MB/s (текст)} ]
-Media:
-[ \approx 150 , \text{MB (медиа)} ]
+# Make comment RPS (Write)
+10 000 000 * 1 comment per day / 86 400 ~= 150 RPS
+Traffic (Write) = 150 RPS * 10 KB = 1,500 KB/s = 1.5 MB/s text & 150MB media
 
-Read Comments RPS (Read):
-RPS =
-[ \frac{10{,}000{,}000 \times 2 \text{ получения комментариев}}{86{,}400} \approx 250 , \text{RPS} ]
-Traffic:
-Text:
-[ 250 , \text{RPS} \times 10 , \text{KB} \times 10 \approx 25{,}000 , \text{KB/s} = 25 , \text{MB/s (текст)} ]
-Media:
-[ 250 , \text{RPS} \times 1000 , \text{KB (медиа)} \approx 250{,}000 , \text{KB/s} = \approx 3 , \text{GB/s (медиа)} ]
+# Read comments RPS (Read)
+10 000 000 * 2 comment fetches / 86 400 ~= 250 RPS
+Traffic (Read) = 250 RPS * 10KB * 10 per comments fetch * 1000KB media ~= 25MB text & ~= 3GB/s media
 
-Make Sub RPS (Write):
-RPS =
-[ \frac{10{,}000{,}000 \times 1 \text{ подписка в день}}{86{,}400} \approx 150 , \text{RPS} ]
-Traffic:
+# Make sub RPS (Write)
+10 000 000 * 1 sub per day / 86 400 ~= 150 RPS
+Traffic (Write) ~= 73KB/s
 
-≈
-73
- 
-KB/s (текст)
-Make Reactions (Write):
-RPS =
-[ \frac{10{,}000{,}000 \times 5 \text{ реакций}}{86{,}000} \approx 550 , \text{RPS} ]
-Traffic:
+# Make reactions (Write)
+10 000 000 * 5 reactions / 86 000 ~= 550 RPS
+Traffic (Write) ~= 268KB/s
 
-≈
-268
- 
-KB/s (текст)
-Search for Travel Destinations per Week (Read):
-RPS =
-[ \frac{10{,}000{,}000 \times 2}{7 \times 86{,}400} \approx 30 , \text{RPS} ]
-Traffic:
-Text:
-[ 30 , \text{RPS} \times (20 , \text{KB (тело текста)} + 2000 , \text{KB (медиа)}) \times 10 , \text{постов} \approx 6 , \text{MB (текст)} ]
-Media:
-[ \approx 600 , \text{MB (медиа)} ]
+# Search for travel destinations per week (Read)
+10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
+Traffic (Read) = 30 RPS * (20KB text body + 2000KB media) * 10 posts ~= 6Mb text & 600MB media
