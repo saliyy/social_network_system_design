@@ -81,6 +81,55 @@ paths:
                   $ref: '#/components/schemas/PostResponse'
         '404':
           description: Posts not found
+    
+  /api/v1/posts/{postId}/images:
+    post:
+      summary: Upload an image for a specific post
+      description: Upload an image to associate with a given post
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+          description: The ID of the post to which the image is being uploaded
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID for tracking the request
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: The image file to upload
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+                    description: URL of the uploaded image
+                  postId:
+                    type: string
+                    description: ID of the post associated with the image
+        '400':
+          description: Invalid image format
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
 
   /api/v1/posts/{postId}/reactions:
     post:
@@ -150,6 +199,16 @@ paths:
       summary: Get comments for a post
       description: Retrieve all comments associated with a specific post
       parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: Page number for pagination
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            description: Number of posts per page
         - in: path
           name: postId
           required: true
@@ -267,6 +326,11 @@ components:
           type: string
           format: date-time
           description: Date and time the post was created
+        imagesURLs:
+          type: array
+          items: 
+            type: string
+          description: URL of the uploaded images associated with the post
         reactions:
           type: array
           items:
