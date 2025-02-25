@@ -1,0 +1,386 @@
+openapi: 3.0.0
+
+tags:
+  - name: Travelers Social Network API
+
+info:
+  title: Travelers Social Network API
+  description: API for a travelers' social network
+  version: 1.0.0
+
+paths:
+  /api/v1/posts:
+    post:
+      summary: Create a post
+      description: Create a new post
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+          description: Idempotency key
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+    get:
+      summary: Get posts
+      description: Retrieve a list of posts with filtering and pagination options
+      parameters:
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID
+        - in: query
+          name: userID
+          schema:
+            type: string
+            format: uuid
+            description: User ID for filtering posts
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: Page number for pagination
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            description: Number of posts per page
+      responses:
+        '200':
+          description: List of posts successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+        '404':
+          description: Posts not found
+        '500':
+          description: "Internal Server Error"
+    
+  /api/v1/images/{imageableID}/{imageable}:
+    post:
+      summary: Upload an image for a specific entity
+      description: Upload an image to associate with a given entity
+      parameters:
+        - in: path
+          name: imageableID
+          required: true
+          schema:
+            type: string
+          description: The name of the entity to which the image is being uploaded
+        - in: path
+          name: imageable
+          required: true
+          example: 'post'
+          schema:
+            type: string
+          description: The enum of the entity to which the image is being uploaded
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID for tracking the request
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: The image file to upload
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+                    description: URL of the uploaded image
+                  imageableID:
+                    type: string
+                    description: ID of the entity associated with the image
+        '400':
+          description: Invalid image format
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+
+  /api/v1/posts/{postId}/reactions:
+    post:
+      summary: Add a reaction to a post
+      description: Allows users to leave reactions on posts
+      parameters:
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+            format: uuid
+            description: Unique identifier of the post to which a reaction is being added
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reaction'
+      responses:
+        '200':
+          description: Reaction successfully added
+        '400':
+          description: Bad request, possibly an invalid reaction specified
+        '404':
+          description: Post not found
+        '500':
+          description: "Internal Server Error"
+
+  /api/v1/posts/{postId}/comments:
+    post:
+      summary: Add a comment to a post
+      description: Allows users to leave comments on posts
+      parameters:
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+            format: uuid
+            description: Unique identifier of the post to which the comment is being added
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+      responses:
+        '201':
+          description: Comment successfully added
+        '400':
+          description: Bad request, possibly an invalid comment specified
+        '404':
+          description: Post not found
+        '500':
+          description: "Internal Server Error"
+
+    get:
+      summary: Get comments for a post
+      description: Retrieve all comments associated with a specific post
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            description: Page number for pagination
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            description: Number of posts per page
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+            format: uuid
+            description: Unique identifier of the post
+      responses:
+        '200':
+          description: List of comments successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CommentResponse'
+        '404':
+          description: Post not found
+        '500':
+          description: "Internal Server Error"
+
+  /api/v1/travelers/{travelerId}/subscriptions:
+    post:
+      summary: Subscribe to a traveler
+      description: Allows the user to subscribe to updates from the specified traveler
+      parameters:
+        - in: header
+          name: X-Trace-Id
+          required: true
+          schema:
+            type: string
+          description: Trace ID
+        - in: path
+          name: travelerId
+          required: true
+          schema:
+            type: string
+            format: uuid
+            description: ID of the traveler to subscribe to
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notificationPreferences:
+                  type: object
+                  properties:
+                    email:
+                      type: boolean
+                      description: Receive notifications via email
+                    push:
+                      type: boolean
+                      description: Receive push notifications
+      responses:
+        '200':
+          description: Successfully subscribed to the traveler
+        '400':
+          description: Bad request, user may already be subscribed
+        '404':
+          description: Traveler not found
+        '500':
+          description: "Internal Server Error"
+
+components:
+  schemas:
+    PostRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the post
+        content:
+          type: string
+          description: Content of the post
+        location:
+          type: object
+          properties:
+            title:
+              type: string
+              description: Title of the location
+              example: "Traveling through Italy"
+            longitude:
+              type: number
+              format: float
+              description: Longitude of the location
+              example: 12.4964
+            latitude:
+              type: number
+              format: float
+              description: Latitude of the location
+
+    Reaction:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who left the reaction
+        type:
+          type: string
+          description: Type of reaction (e.g., "like", "love", "sad", etc.)
+
+    PostResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the post
+        title:
+          type: string
+          description: Title of the post
+        content:
+          type: string
+          description: Content of the post
+        created_at:
+          type: string
+          format: date-time
+          description: Date and time the post was created
+        imagesURLs:
+          type: array
+          items: 
+            type: string
+          description: URL of the uploaded images associated with the post
+        reactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reaction'
+          description: Array of reactions to the post
+        
+    Comment:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who left the comment
+        content:
+          type: string
+          description: Content of the comment
+          example: "This is an amazing post! I loved it."
+
+    CommentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the comment
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who left the comment
+        content:
+          type: string
+          description: Content of the comment
+        created_at:
+          type: string
+          format: date-time
+          description: Date and time the comment was created
