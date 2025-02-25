@@ -81,18 +81,27 @@ paths:
                   $ref: '#/components/schemas/PostResponse'
         '404':
           description: Posts not found
+        '500':
+          description: "Internal Server Error"
     
-  /api/v1/posts/{postId}/images:
+  /api/v1/images/{imageableID}/{imageable}:
     post:
-      summary: Upload an image for a specific post
-      description: Upload an image to associate with a given post
+      summary: Upload an image for a specific entity
+      description: Upload an image to associate with a given entity
       parameters:
         - in: path
-          name: postId
+          name: imageableID
           required: true
           schema:
             type: string
-          description: The ID of the post to which the image is being uploaded
+          description: The name of the entity to which the image is being uploaded
+        - in: path
+          name: imageable
+          required: true
+          example: 'post'
+          schema:
+            type: string
+          description: The enum of the entity to which the image is being uploaded
         - in: header
           name: X-Trace-Id
           required: true
@@ -121,9 +130,9 @@ paths:
                   imageUrl:
                     type: string
                     description: URL of the uploaded image
-                  postId:
+                  imageableID:
                     type: string
-                    description: ID of the post associated with the image
+                    description: ID of the entity associated with the image
         '400':
           description: Invalid image format
         '404':
@@ -162,6 +171,8 @@ paths:
           description: Bad request, possibly an invalid reaction specified
         '404':
           description: Post not found
+        '500':
+          description: "Internal Server Error"
 
   /api/v1/posts/{postId}/comments:
     post:
@@ -194,6 +205,8 @@ paths:
           description: Bad request, possibly an invalid comment specified
         '404':
           description: Post not found
+        '500':
+          description: "Internal Server Error"
 
     get:
       summary: Get comments for a post
@@ -227,8 +240,10 @@ paths:
                   $ref: '#/components/schemas/CommentResponse'
         '404':
           description: Post not found
+        '500':
+          description: "Internal Server Error"
 
-  /api/v1/travelers/{travelerId}/sub:
+  /api/v1/travelers/{travelerId}/subscriptions:
     post:
       summary: Subscribe to a traveler
       description: Allows the user to subscribe to updates from the specified traveler
@@ -269,6 +284,8 @@ paths:
           description: Bad request, user may already be subscribed
         '404':
           description: Traveler not found
+        '500':
+          description: "Internal Server Error"
 
 components:
   schemas:
