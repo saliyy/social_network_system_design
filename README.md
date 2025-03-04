@@ -201,29 +201,7 @@ Comments:
 
 Для реакций/подписок не стал расписывать, возьмем по 1 диску SSD, т.к там в основном высокий IOPs, не нужна высокая пропускная способность и маленький capacity. 
 
-#### DB entities
 
-# Object Oriented DB:
-
-Table Users {
-  id ObjectId
-  username String
-  age Date
-  bio String
-  createdAt Date 
-  updatedAt Date
-}
-
-Table Place {
-  id ObjectId
-  title String
-  body text
-  photos: Path[]
-  raiting:
-  latitude: Double(9,6)
-  longitude: Double(9,6)
-  tags: String[]
-}
 
 
 
