@@ -112,7 +112,7 @@ Posts:
         Disks_for_capacity: 24TB / 100TB = 1 disk
         Disks_for_throughput: 100MB / 500MB = 1 disk
         Disks_for_iops: 400 / 1000 = 1 disk
-        Total: max(ceil(1), ceil(1), ceil(1)) = 1
+        Total: max(ceil(1), ceil(1), ceil(1)) = 4 disks по 6 ТБ
 
       SSD(nVME):
         Disks_for_capacity: 24TB / 30 = 1.3 disks
@@ -120,7 +120,7 @@ Posts:
         Disks_for_iops: 400 / 10_000 = 1 disk
         Total: max(ceil(1.3), ceil(1), ceil(1)) = 2
     Summary: 
-      - Можно выбрать SSD(SATA) 1 диск заместо 4 HDD, при этом холодные данные сгружать на HDD
+      - Можно выбрать SSD(SATA) 4 диска по 6 ТБ, старые посты сгружать на HDD
   Media: 
     capacity: 60 MB/s * 86400 * 365 ~= 2,4PB
     traffic_per_sec(RW): 10GB/s
@@ -144,8 +144,8 @@ Posts:
        Disks_for_iops: 400 / 10_000 = 0,4 = 1 disk
        Total: max(ceil(80), ceil(4), ceil(1)) = 80
   Summary:
-    Вероятно SSD(nVME) по 80 дисков будет здесь наиболее эффективным решением из-за емкости и высокой пропускной способности
-    Холодные данные можно сгружать на HDD
+    Взять 20-30 SSD(nVME) и 70-80 HDD
+
 
 Comments:
   Meta:
@@ -171,7 +171,7 @@ Comments:
         Disks_for_iops: 400 / 10_000 = 1 disk
         Total: max(ceil(1.3), ceil(1), ceil(1)) = 2
     Summary: 
-      - Можно выбрать SSD(SATA) 1 диск заместо 4 HDD, при этом холодные комменты сгружать на HDD
+      - Можно выбрать SSD(SATA) 4 диска по 6 ТБ, старые комменты сгружать на HDD
 
   Media: 
     capacity: 150MB  * 86400 * 365 ~= 4,5PB
@@ -196,7 +196,8 @@ Comments:
        Disks_for_iops: 400 / 10_000 = 0,4 = 1 disk
        Total: max(ceil(80), ceil(4), ceil(1)) = 150
   Summary:
-    Вероятно SSD(SATA) по 46 дисков будет здесь наиболее эффективным решением. Старые данные будем сгружать на HDD, т.к старые комменты читают крайне редко
+    SSD(SATA): 20 дисков по 12 ТБ на горячие данные
+    HDD: 100-120 дисков на холодные
 
 
 Для реакций/подписок не стал расписывать, возьмем по 1 диску SSD, т.к там в основном высокий IOPs, не нужна высокая пропускная способность и маленький capacity. 
