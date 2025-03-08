@@ -18,8 +18,8 @@ Table db_posts.posts {
 
 Table db_media.media {
     id integer [primary key]
-    mediable_id integer
-    mediable_type varchar # like comment, post, other...
+    media_id integer
+    media_type varchar # like comment, post, other...
     uri text
     type varchar
     created_at timestamp
