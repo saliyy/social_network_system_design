@@ -36,6 +36,10 @@ Functional requirements:
  - body + title + link + other ~= 20 KB
  - Images ~= 3 image per post * 500KB ~= 2MB
 
+ ### Places: 
+ - body + title + link + other ~= 20 KB
+ - Images ~= 3 image per post * 500KB ~= 2MB
+
 ### Comment:
 - body ~= 10KB
 - images ~= 1MB
@@ -86,5 +90,114 @@ Traffic (Write)
 # Search for travel destinations per week (Read)
 10 000 000 * 2 / 7 / 86 400 ~= 30 RPS
 Traffic (Read)
-  Text: 30 RPS * 20KB text body * 10 posts ~= 6Mb text
-  Media: 30 RPS * 2000KB media * 10 posts ~= 600MB media
+  Text: 30 RPS * 20KB text body * 10 places ~= 6Mb text
+  Media: 30 RPS * 2000KB media * 10 places ~= 600MB media
+
+
+#### DISK evaluation per one year:
+
+Posts:
+  Meta:
+    capacity: 600KB/s * 86400 * 365 ~= 24000000000KB ~= 24TB 
+    traffic_per_sec(RW): 100MB
+    iops(RW): ceil(350 + 30) = 400
+
+      HDD:
+        Disks_for_capacity: 24TB / 32TB = 1 disks (c запасом)
+        Disks_for_throughput: 100MB / 100MB = 2 disks (на случай пропускать больше на 15-20%)
+        Disks_for_iops: 400 / 100 = 4 disks
+        Total: max(ceil(1.5), ceil(2), ceil(4)) = 4
+      
+      SSD(SATA):
+        Disks_for_capacity: 24TB / 100TB = 1 disk
+        Disks_for_throughput: 100MB / 500MB = 1 disk
+        Disks_for_iops: 400 / 1000 = 1 disk
+        Total: max(ceil(1), ceil(1), ceil(1)) = 4 disks по 6 ТБ
+
+      SSD(nVME):
+        Disks_for_capacity: 24TB / 30 = 1.3 disks
+        Disks_for_throughput: 100MB / 3GB/sec = 1 disk 
+        Disks_for_iops: 400 / 10_000 = 1 disk
+        Total: max(ceil(1.3), ceil(1), ceil(1)) = 2
+    Summary: 
+      - Можно выбрать SSD(SATA) 4 диска по 6 ТБ, старые посты сгружать на HDD
+  Media: 
+    capacity: 60 MB/s * 86400 * 365 ~= 2,4PB
+    traffic_per_sec(RW): 10GB/s
+    iops(RW): ceil(350 + 30) = 400
+
+      HDD:
+        Disks_for_capacity: 2.4PB / 32TB ~= 75 disks
+        Disks_for_throughput: 10GB/s / 100MB/s = 100 disks
+        Disks_for_iops: 400 / 100 = 4 disks
+        Total: max(ceil(75), ceil(100), ceil(4)) = 100
+
+      SSD(SATA):
+       Disks_for_capacity: 2.4BP / 100TB ~= 24 disks (если каждый диск будет по 100ТБ)
+       Disks_for_throughput: 10GB/s / 500MB/s = 20 disks
+       Disks_for_iops: 400 / 1000 = 0,4 => 1 disk
+       Total: max(ceil(24), ceil(20), ceil(1)) = 24
+
+      SSD(nVME):
+       Disks_for_capacity: 2.4PB / 30TB = 80 disks (каждый диск по 30ТБ)
+       Disks_for_throughput: 10GB/s / 3GB/s = 4 disks
+       Disks_for_iops: 400 / 10_000 = 0,4 = 1 disk
+       Total: max(ceil(80), ceil(4), ceil(1)) = 80
+  Summary:
+    Взять 20-30 SSD(nVME) и 70-80 HDD
+
+
+Comments:
+  Meta:
+    capacity: 1.5 MB/s text * 86400 * 365 ~= 47.3TB
+    traffic_per_sec(RW): 27MB/s
+    iops(RW): 250 + 150 = 400
+
+      HDD:
+        Disks_for_capacity: 47.3TB / 32TB = 2 disks (c запасом)
+        Disks_for_throughput: 27MB/s / 100MB = 1 disks
+        Disks_for_iops: 400 / 100 = 4 disks
+        Total: max(ceil(1.5), ceil(2), ceil(4)) = 4
+      
+      SSD(SATA):
+        Disks_for_capacity: 47.3TB / 100TB = 1 disk 
+        Disks_for_throughput: 27MB/s / 500MB = 1 disk
+        Disks_for_iops: 400 / 1000 = 1 disk
+        Total: max(ceil(1), ceil(1), ceil(1)) = 1
+
+      SSD(nVME):
+        Disks_for_capacity: 47.3TB / 30 = 2 disks (c запасом)
+        Disks_for_throughput: 27MB/s / 3GB/sec = 1 disk 
+        Disks_for_iops: 400 / 10_000 = 1 disk
+        Total: max(ceil(1.3), ceil(1), ceil(1)) = 2
+    Summary: 
+      - Можно выбрать SSD(SATA) 4 диска по 6 ТБ, старые комменты сгружать на HDD
+
+  Media: 
+    capacity: 150MB  * 86400 * 365 ~= 4,5PB
+    traffic_per_sec(RW): 3,5GB/s
+    iops(RW): 250 + 150 = 400
+
+      HDD:
+        Disks_for_capacity: 4,5PB / 32TB = 144 disks
+        Disks_for_throughput: 3,5GB/s / 100MB/s = 35 disks
+        Disks_for_iops: 400 / 100 = 4 disks
+        Total: max(ceil(75), ceil(100), ceil(4)) = 144
+
+      SSD(SATA):
+       Disks_for_capacity: 4,5PB / 100TB ~= 46 disks
+       Disks_for_throughput: 3,5GB/s / 500MB/s = 15 disks
+       Disks_for_iops: 400 / 1000 = 0,4 => 1 disk
+       Total: max(ceil(24), ceil(20), ceil(1)) = 46
+
+      SSD(nVME):
+       Disks_for_capacity: 4,5PB / 30TB ~= 150 disks
+       Disks_for_throughput: 3,5GB/s / 3GB/s = 1.5 disks
+       Disks_for_iops: 400 / 10_000 = 0,4 = 1 disk
+       Total: max(ceil(80), ceil(4), ceil(1)) = 150
+  Summary:
+    SSD(SATA): 20 дисков по 12 ТБ на горячие данные
+    HDD: 100-120 дисков на холодные
+
+
+Для реакций/подписок не стал расписывать, возьмем по 1 диску SSD, т.к там в основном высокий IOPs, не нужна высокая пропускная способность и маленький capacity. 
