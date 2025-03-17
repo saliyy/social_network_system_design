@@ -160,7 +160,7 @@ Posts:
         Hosts = 100 disk / 4 disk by host = 25
         Replicas: 25 hosts с RF 2 = 50 hosts
     Sharding:
-     - hash partitioning для (image_id, image_type), данные для одного поста/комментария/etc будем писать в один шард и читать из одного шарда
+     - hash partitioning для (image_id)
     Replication:
      async master-master между ДЦ, потеря поста не так страшна, ниже consistency, выше availability. 
      В рамках одного ДЦ сделаем репликацию master-slave по строгому коворуму хотя бы на одну W реплику. 
