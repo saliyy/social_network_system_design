@@ -11,6 +11,7 @@ Table db_posts.posts {
   id integer [primary key]
   user_id integer
   title text
+  place_id integer
   content text
   created_at timestamp
   updated_at timestamp
