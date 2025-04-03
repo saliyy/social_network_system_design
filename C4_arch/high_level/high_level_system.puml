@@ -1,0 +1,18 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User")
+Container(PostSystem, "Post System", "Software system", "CRUD for posts, comments and likes")
+Container(FollowingSystem, "Following System", "Software system", "Stores relation info")
+Container(MediaSystem, "Media System", "S3 storage", "Stores/Get media files")
+Container(GeoSystem, "Geo System", "Software system", "Manipulate with Geo. Validate, Get")
+Container(FeedSystem, "Feed System", "Software system", "Work with cached feeds. Home feeds, User feeds")
+Container(CDN, "CDN", "CloudFlare", "Location based CDN")
+
+Rel(user, GeoSystem, "Add/get geo locations")
+Rel(user, PostSystem, "CRUD for posts")
+Rel(user, FollowingSystem, "Subscribe or unsubscribe")
+Rel(user, FeedSystem, "Get feeds of his followers, home feed")
+Rel(user, CDN, "Get media")
+Rel(CDN, MediaSystem, "Put/get media")
+@enduml
