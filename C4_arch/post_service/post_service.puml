@@ -1,0 +1,21 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User")
+Container(ApiGateway, "API Gateway", "Nginx", "Round robin balancer")
+ContainerQueue(MessageQueue, "Events queue", "Kafka", "Common event bus for any domain event")
+Container(GeoService, "Geo Service", "Go service", "Manage geo, like address system")
+
+
+System_Boundary(PostSystem, "Post System") {
+    Container(PostService, "Post Service", "Go", "Stores a cache for quick response to the user", $tags="webApp")
+    ContainerDb(PostCache, "Post cache", "Redis", "Stores a cache")
+    ContainerDb(PostDB, "Post DB", "Postgres", "Stores a posts")
+}
+
+Rel(user, ApiGateway, "", "REST")
+Rel(PostService, MessageQueue, "Produce events that post has been created")
+Rel(PostService, GeoService, "Get/Validate Geo")
+Rel(ApiGateway, PostService, "CRUD posts")
+
+@enduml

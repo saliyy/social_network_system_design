@@ -1,0 +1,23 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User")
+Container(ApiGateway, "API Gateway", "Nginx", "Round robin balancer")
+ContainerQueue(MessageQueue, "Events queue", "Kafka", "Queue for posts CRUD events and followers subscribe maniplulations")
+Container(CDN, "CDN", "CloudFlare", "Location based CDN")
+
+
+System_Boundary(FeedSystem, "Feed System") {
+    Container(FeedService, "Feed Service", "Go", "Stores a cache for quick response to the user", $tags="webApp")
+    ContainerDb(FeedCache, "Feed cache", "Redis", "Stores a cache, will response home_feeds: [{user_id: 1, posts: [post_id, text, mediaUrls]}],and also user_feeds: {user_id: 111, posts: [{...}]}")
+    ContainerDb(FeedDB, "Feed DB", "Postgres", "Stores a feeds same the cache")
+}
+
+Rel(user, ApiGateway, "Get feeds", "REST")
+Rel(FeedService, MessageQueue, "Consume posts events to prepare cache feed, consume subscribe events to recalculate feed")
+Rel(FeedService, FeedCache, "Set/Get prepared view, if no data, it would going to cold storage")
+Rel(FeedService, FeedDB, "Cold storage for old feedings")
+Rel(user, CDN, "Get media for feed")
+Rel(ApiGateway, FeedService, "CRUD posts")
+
+@enduml
